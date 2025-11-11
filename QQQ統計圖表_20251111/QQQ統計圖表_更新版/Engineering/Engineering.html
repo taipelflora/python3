@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>工程分析</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="Engineering.css">
+    <link rel="stylesheet" href="../Analysis/Analysis.css">
+    <!-- 引入 Chart.js 用於繪圖 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- 引入 Papa Parse 用於解析 CSV -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <!-- 引入 Chart.js Date Adapter -->
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/cdn.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+
+<body>
+
+    <header class="report-header">
+        <p class="report-subtitle">職能發展學院｜Python機器學習</p>
+        <h1 class="report-title">第三組 - 美國科技股ETF預測與分析</h1>
+    </header>
+
+    <nav class="navbar">
+        <a href="../index.html" class="nav-item">首頁</a>
+        <a href="Engineering.html" class="nav-item active">特徵工程</a>
+        <a href="../Analysis/Analysis.html" class="nav-item">資料分析</a>
+    </nav>
+
+    <main class="container">
+        <section class="about-section">
+            <article class="about-card">
+                <h2>資料清理與特徵工程</h2>
+               
+                <div class="about-content">
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc"><strong>頻率統一：</strong>將資料對齊為週線，處理交易日、時區差異與合併多源資料。</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc"><strong>缺失與異常處理：</strong>偵測缺值與離群，使用合理填補或移除策略以維持資料品質。</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc"><strong>指標計算：</strong>產生技術指標（SMA/EMA/MACD/RSI/BBANDS/ATR/CMF 等）與滯後報酬作為特徵。</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc"><strong>尺度化與篩選：</strong>對數值進行標準化/正規化，並篩選對模型有幫助的欄位。</div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </section>
+
+        <div class="content-section">
+            <h2>資料處理（Data Preprocessing）</h2>
+            <p class="lead">本專案以 QQQ ETF（週線）為預測標的，透過系統化的清洗與特徵工程準備模型輸入資料。</p>
+            <ol>
+                <li>
+                    <strong>資料來源與範圍</strong>
+                    <ul>
+                        <li>使用歷史價格（Open/High/Low/Close/Volume）與外部經濟指標作為候選特徵。</li>
+                        <li>時間範圍：以 2017–2025 年的週線資料為主要分析期間。</li>
+                        <li>資料讀取與初步檢查採用 pandas 並記錄處理步驟以利重現。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>缺失值與異常值處理</strong>
+                    <ul>
+                        <li>檢測缺漏與異常（如成交量為 0）；必要時以前一筆有效值填補或移除錯誤列。</li>
+                        <li>對極端值可採截斷或標記策略，視情況保留供模型判斷。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>標籤與特徵工程</strong>
+                    <ul>
+                        <li>目標：預測下一週漲跌（上漲 = 1，否則 = 0）。</li>
+                        <li>計算技術指標（SMA/EMA/MACD/RSI/BBANDS/ATR）、宏觀特徵。</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <section class="chart-container">
+            <h2>QQQ 指數收盤價歷史走勢圖</h2>
+            <div class="chart-controls">
+                <button class="time-filter-btn active" data-range="all" data-chart="qqq">全部日期</button>
+                <button class="time-filter-btn" data-range="model" data-chart="qqq">模型日期區間</button>
+            </div>
+            <!-- 圖表畫布 -->
+            <canvas id="qqqClosePriceChart"></canvas>
+            <!-- 指標切換按鈕（QQQ） -->
+
+            <div class="indicator-controls">
+                <span>顯示指標：</span>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="SMA"> SMA</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="EMA"> EMA</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="MACD"> MACD</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="RSI"> RSI</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="STOCH"> Stoch</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="BBANDS"> BBANDS</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="ATR"> ATR</label>
+                <label><input type="checkbox" class="indicator-toggle" data-ind="CMF"> CMF</label>
+            </div>
+
+            <div class="chart-metadata">
+                <div class="meta-section">
+                    <h2>趨勢指標 — SMA / EMA</h2>
+                    <p>移動平均可平滑價格波動，幫助識別中長期趨勢方向。
+                    <strong>SMA</strong> 給予各期相同權重，適合觀察整體趨勢；
+                    <strong>EMA</strong> 對近期價格加權較重，反應較快。</p>
+                </div>
+
+                <div class="meta-section">
+                    <h2>動能指標 — MACD / Stochastic</h2>
+                    <p><strong>MACD</strong> 比較短期與長期 EMA 的差距，配合訊號線與柱狀圖可提示趨勢強弱與可能轉折。
+                    <strong>Stochastic</strong> 量化收盤價相對於一段時間高低範圍，常用於判斷超買/超賣。</p>
+                </div>
+
+                <div class="meta-section">
+                    <h2>情緒指標 — RSI</h2>
+                    <p>衡量一定期間內的漲跌強度，數值介於 0 到 100。高於 70 可能超買，低於 30 可能超賣，有助於預測反轉機率。</p>
+                </div>
+
+                <div class="meta-section">
+                    <h2>波動指標 — BBANDS / ATR / CMF</h2>
+                    <p><strong>BBANDS</strong> 以移動平均為中軸並加減標準差，顯示價格波動範圍；
+                    <strong>ATR</strong> 測量真實波幅，供風險管理使用；
+                    <strong>CMF</strong> 結合價格與成交量評估資金流入或流出趨勢。</p>
+                </div>
+
+                <div class="meta-section">
+                    <h2>成交量</h2>
+                    <p>成交量用來驗證價格趨勢是否有資金支持。價格上漲且成交量同步增加，代表趨勢較可靠；反之則需謹慎。</p>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <section class="chart-container">
+            <h2>預測模型的核心觀察維度</h2>
+             <div class="chart-metadata">
+            <section>
+                <h3>1. 看長期趨勢：經濟景氣與資金動能</h3>
+                <p>
+                    透過 M2 （貨幣供給）、PMI （企業景氣）、失業率等宏觀指標，觀察資金流動性與景氣循環。
+                    這些數據變化較緩，適合用於預測週、月、季等中長期走勢。
+                </p>
+            </section>
+
+            <section>
+                <h3>2. 抓政策影響：市場會不會突然轉向</h3>
+                <p>
+                    FOMC 開會、利率調整、貨幣政策變化等因素，會影響市場風險偏好與資金配置。
+                    這些特徵可用來標記事件週期，或作為模型切換的觸發點。
+                </p>
+            </section>
+
+            <section>
+                <h3>3. 追蹤市場情緒：投資人信心與波動狀況</h3>
+                <p>
+                    加入 VIX（恐慌指數）、資金流向、金融機構準備金等指標，
+                    有助於捕捉短期情緒波動與市場壓力，提升模型對突發行情的反應能力。
+                </p>
+                </div>
+                <section class="card-container">
+                    <div class="chart-card" data-key="M2_Not_seasonally_adjusted" data-label="M2:廣義貨幣供給量"
+                        data-y-axis="億美元">
+                        <h4>M2</h4>
+                        <p>廣義貨幣供給量</p>
+                    </div>
+                    <div class="chart-card" data-key="PMI_value" data-label="PMI:企業景氣" data-y-axis="指數">
+                        <h4>PMI</h4>
+                        <p>企業景氣</p>
+                    </div>
+                    <div class="chart-card" data-key="Unemployment_Rate" data-label="Unemployment Rate:失業率"
+                        data-y-axis="百分比 (%)">
+                        <h4>Unemployment Rate</h4>
+                        <p>失業率</p>
+                    </div>
+                    <div class="chart-card" data-key="FOMC_value" data-label="FOMC:利率政策動向" data-y-axis="百分比 (%)">
+                        <h4>FOMC</h4>
+                        <p>利率政策動向</p>
+                    </div>
+                    <div class="chart-card" data-key="USD_closing_price" data-label="USD:美元指數" data-y-axis="指數">
+                        <h4>USD</h4>
+                        <p>美元指數</p>
+                    </div>
+                    <div class="chart-card" data-key="VIX_close" data-label="VIX:恐慌指數" data-y-axis="指數">
+                        <h4>VIX</h4>
+                        <p>恐慌指數</p>
+                    </div>
+                    <div class="chart-card"
+                        data-key="Reserves_of_depository_institutions_nonborrowed_not_seasonally_adjusted"
+                        data-label="Bank Reserves:存款機構準備金總額" data-y-axis="億美元">
+                        <h4>Bank Reserves</h4>
+                        <p>存款機構準備金總額</p>
+                    </div>
+
+                </section>
+                <!-- 圖表畫布 -->
+                <canvas id="featureChart"></canvas>
+                <div class="chart-controls">
+                    <button class="time-filter-btn active" data-range="all" data-chart="feature">全部日期</button>
+                    <button class="time-filter-btn" data-range="model" data-chart="feature">模型日期區間</button>
+                </div>
+            </section>
+            <section class="chart-container">
+                <h2>斯皮爾曼熱力圖分析</h2>
+                <p>用於顯示變數之間相關性的可視化工具。透過這種圖表，我們可以直觀地觀察到不同經濟指標之間的相互關係，進而為模型的特徵選擇提供依據。</p>
+                <img class="spearman-heatmap" src="./sss.png" alt="Spearman Heatmap">
+            </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2025 職能發展學院. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="Engineering.js"></script>
+
+</body>
+
+</html>

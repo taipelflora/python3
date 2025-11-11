@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>資料分析</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./Analysis.css">
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <header class="report-header">
+        <p class="report-subtitle">臺北市職能發展學院｜Python機器學習</p>
+        <h1 class="report-title">第三組 - 美國科技股ETF預測與分析</h1>
+    </header>
+
+    <nav class="navbar">
+        <a href="../index.html" class="nav-item">首頁</a>
+        <a href="../Engineering/Engineering.html" class="nav-item">特徵工程</a>
+        <a href="Analysis.html" class="nav-item active">資料分析</a>
+    </nav>
+
+    <main class="container">
+        <!-- 關於本專案 卡片（新增） -->
+        <section class="about-section">
+            <article class="about-card">
+                <h2>讓機器學習為投資決策提供量化依據</h2>
+                <div class="about-content">
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc">使用 <strong>機器學習 (XGBoost) </strong> 預測 QQQ ETF 週線漲跌趨勢</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc">整合 <strong>VIX與技術指標</strong> 等特徵</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc">採用 <strong>滾動式時間分割</strong>，模擬真實交易環境</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc">平均準確率約 <strong>55–60%</strong>，維持穩定泛化表現</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc">提供 <strong>買進訊號燈</strong> + <strong>預測價格線</strong> 的互動視覺化</div>
+                        </li>
+                        <li>
+                            <span class="feature-bullet" aria-hidden="true"></span>
+                            <div class="feature-desc">展示模型於 <strong>疫情後波動市場</strong> 的適應能力</div>
+                        </li>
+                    </ul>
+
+                    <div class="about-viz" aria-hidden="true">
+                        <div class="signal-box">
+                            <div class="signal-label">買進訊號燈</div>
+                            <div class="signal-lights">
+                                <span class="light red"></span>
+                                <span class="light yellow"></span>
+                                <span class="light green active"></span>
+                            </div>
+                        </div>
+
+                        <!-- 小型 SVG 走勢示意圖（靜態占位，可後續改為動態） -->
+                        <svg class="mini-sparkline" viewBox="0 0 120 40" preserveAspectRatio="none">
+                            <polyline points="0,30 15,24 30,28 45,18 60,22 75,14 90,20 105,10 120,16" fill="none"
+                                stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- 模型的選擇 區塊 -->
+        <section class="models-section">
+            <h2>模型的選擇</h2>
+            <p class="lead">根據資料特性與預測目標，以下比較常見的分類演算法及其優缺點。</p>
+
+            <!-- 模型比較卡片：Logistic Regression vs Decision Tree Ensemble -->
+            <div class="algorithms-compare">
+                <div class="algo-card">
+                    <div class="card-header">
+                        <h3>Logistic Regression</h3>
+                        <span class="badge">監督式 · 分類</span>
+                    </div>
+                    <div class="card-body">
+                        <button class="toggle-details-btn" onclick="toggleDetails(this)">詳細資訊 ▼</button>
+                        <div class="details-content" style="display: none;">
+                            <h4>優點</h4>
+                            <ul class="pros">
+                                <li>簡單且可解釋：係數能直接反映特徵影響</li>
+                                <li>計算效率高，適合基線模型</li>
+                                <li>在線性可分或近線性的問題上表現良好</li>
+                            </ul>
+
+                            <h4>缺點</h4>
+                            <ul class="cons">
+                                <li>僅能表現線性決策邊界，無法捕捉複雜非線性關係</li>
+                                <li>對共線性敏感（特徵間高度相關）</li>
+                                <li>需要適當的特徵工程與尺度化</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algo-card">
+                    <div class="card-header">
+                        <h3>Decision Tree Ensemble</h3>
+                        <span class="badge">監督式 · 集成</span>
+                    </div>
+                    <div class="card-body">
+                        <button class="toggle-details-btn" onclick="toggleDetails(this)">詳細資訊 ▼</button>
+                        <div class="details-content" style="display: none;">
+                            <h4>優點</h4>
+                            <ul class="pros">
+                                <li>能捕捉非線性關係與複雜互動特徵</li>
+                                <li>集成方法（如 Random Forest / Gradient Boosting）能提升穩定性與預測力</li>
+                                <li>可提供特徵重要性，有助於變數選擇</li>
+                            </ul>
+
+                            <h4>缺點</h4>
+                            <ul class="cons">
+                                <li>可解釋性較差（單一樹易解釋，集成後不易直觀理解）</li>
+                                <li>若未適當調參，可能過擬合或計算成本高</li>
+                                <li>訓練與推論在大型資料集上可能較耗時</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 測試結果按鈕與顯示區 -->
+            <div class="test-result-section">
+                <button class="show-result-btn" onclick="toggleResult()">查看測試結果</button>
+                <div class="result-display" id="resultDisplay" style="display: none;">
+                    <p class="result-text">📊 我們的初步測試結果：<strong>XGBoost > Random Forest > Logistic Regression</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 跨越市場周期的模型驗證 卡片 -->
+        <section class="validation-section">
+            <article class="validation-card">
+                <h2>🟩 跨越市場周期的模型驗證</h2>
+                <p class="summary">模型以2017–2025年間的美股週線資料訓練與測試，經歷疫情前後多空循環，展現穩定的預測與泛化能力。</p>
+
+                <ul class="validation-points">
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">採用 <strong>滾動式時間分割</strong>：每四年訓練、下一年測試</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">模擬 <strong>真實市場條件</strong>，避免資料外洩與過擬合</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">平均準確率維持 <strong>55–60%</strong>，跨時期穩定表現</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">能適應 <strong>多頭與空頭市場</strong> 結構轉換</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">驗證模型在 <strong>高波動時期（COVID-19）</strong> 仍具辨識力</div>
+                    </li>
+                </ul>
+
+                <!-- 測試結果視覺化 -->
+                <div class="chart-container">
+                    <h3>歷年測試結果</h3>
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+
+                <!-- 資料表格 -->
+                <div class="data-table-container">
+                    <button class="toggle-table-btn" onclick="toggleTable()">顯示詳細數據 ▼</button>
+                    <div id="dataTable" style="display: none;">
+                        <table class="result-table">
+                            <thead>
+                                <tr>
+                                    <th>訓練期間</th>
+                                    <th>測試期間</th>
+                                    <th>準確率</th>
+                                    <th>平衡準確率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2017/10/19 - 2021/10/07</td>
+                                    <td>2021/10/14 - 2022/10/06</td>
+                                    <td>55.80%</td>
+                                    <td>57.60%</td>
+                                </tr>
+                                <tr>
+                                    <td>2018/10/18 - 2022/10/06</td>
+                                    <td>2022/10/13 - 2023/10/05</td>
+                                    <td>57.70%</td>
+                                    <td>58.90%</td>
+                                </tr>
+                                <tr>
+                                    <td>2019/10/17 - 2023/10/05</td>
+                                    <td>2023/10/12 - 2024/10/03</td>
+                                    <td>55.80%</td>
+                                    <td>57.00%</td>
+                                </tr>
+                                <tr>
+                                    <td>2020/10/15 - 2024/10/03</td>
+                                    <td>2024/10/10 - 2025/10/02</td>
+                                    <td>57.70%</td>
+                                    <td>59.10%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- 模型評估與指標分析 卡片 -->
+        <section class="evaluation-section">
+            <article class="evaluation-card">
+                <h2>🟧 模型評估與指標分析</h2>
+                <p class="summary">透過混淆矩陣與四項關鍵指標,呈現模型在最後測試階段的分類能力與判斷準確度。</p>
+
+                <ul class="evaluation-points">
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc"><strong>準確率（Accuracy）</strong>：整體預測正確比例</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc"><strong>精確率（Precision）</strong>：預測為上漲中實際上漲的比例</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc"><strong>召回率（Recall）</strong>：實際上漲中被成功辨識的比例</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc"><strong>F1-score</strong>：Precision 與 Recall 的平衡指標</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc"><strong>混淆矩陣</strong>：可視化各類別的預測結果</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc"><strong>ROC/AUC 曲線</strong>：以閾值無關方式衡量整體辨識力</div>
+                    </li>
+                </ul>
+
+                <!-- 混淆矩陣與指標區塊 - 2x2 網格佈局 -->
+                <div class="matrix-metrics-wrapper grid-2x2">
+                    <!-- 左上：混淆矩陣視覺化 -->
+                    <div class="confusion-matrix-container">
+                        <h3>混淆矩陣 (Confusion Matrix)</h3>
+                        <div class="matrix-wrapper">
+                            <table class="confusion-matrix">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th colspan="2" class="predicted-label">預測值 (Predicted)</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th class="actual-label">實際值 (Actual)</th>
+                                        <th>NO</th>
+                                        <th>YES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="axis-spacer"></td>
+                                        <td class="row-label">NO</td>
+                                        <td class="cell-tn" data-value="14">
+                                            <div class="cell-content">
+                                                <span class="cell-number">14</span>
+                                                <span class="cell-label">TN</span>
+                                            </div>
+                                        </td>
+                                        <td class="cell-fp" data-value="7">
+                                            <div class="cell-content">
+                                                <span class="cell-number">7</span>
+                                                <span class="cell-label">FP</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="axis-spacer"></td>
+                                        <td class="row-label">YES</td>
+                                        <td class="cell-fn" data-value="15">
+                                            <div class="cell-content">
+                                                <span class="cell-number">15</span>
+                                                <span class="cell-label">FN</span>
+                                            </div>
+                                        </td>
+                                        <td class="cell-tp" data-value="16">
+                                            <div class="cell-content">
+                                                <span class="cell-number">16</span>
+                                                <span class="cell-label">TP</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="matrix-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color tp"></span>
+                                    <span>TP (True Positive): 正確預測上漲</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color tn"></span>
+                                    <span>TN (True Negative): 正確預測下跌</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color fp"></span>
+                                    <span>FP (False Positive): 誤判為上漲</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color fn"></span>
+                                    <span>FN (False Negative): 誤判為下跌</span>
+                                </div>
+                            </div>
+                            <div class="matrix-note">
+                                <strong>註：</strong>YES 表示下一週預測價格較本週價格上漲至少 0.5%；NO 則表示漲幅未達 0.5% 或下跌。
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右上：模型指標資訊 -->
+                    <div class="metrics-container">
+                        <h3>模型評估指標</h3>
+                        <div class="metrics-info">
+                            <div class="metric-item model-name">
+                                <span class="metric-label">Model:</span>
+                                <span class="metric-value">XGBoost</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Training Data:</span>
+                                <span class="metric-value">From 2020-10-15 To 2024-10-03</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Testing Data:</span>
+                                <span class="metric-value">From 2024-10-10 To 2025-10-02</span>
+                            </div>
+                            <div class="metric-divider"></div>
+                            <div class="metric-item highlight">
+                                <span class="metric-label">Accuracy:</span>
+                                <span class="metric-value">57.7%</span>
+                            </div>
+                            <div class="metric-item highlight">
+                                <span class="metric-label">Precision:</span>
+                                <span class="metric-value">69.6%</span>
+                            </div>
+                            <div class="metric-item highlight">
+                                <span class="metric-label">Recall:</span>
+                                <span class="metric-value">51.6%</span>
+                            </div>
+                            <div class="metric-item highlight">
+                                <span class="metric-label">F1 Score:</span>
+                                <span class="metric-value">59.3%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 左下：ROC/AUC 曲線 -->
+                    <div class="roc-container">
+                        <h3>ROC/AUC 曲線</h3>
+                        <div class="roc-chart-wrapper">
+                            <canvas id="rocChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 右下：結果分析 -->
+                    <div class="analysis-container">
+                        <h3>結果分析</h3>
+                        <div class="analysis-content">
+                            <div class="analysis-section">
+                                <h4>📊 模型表現總結</h4>
+                                <p>XGBoost 模型在測試期間 (2024/10-2025/10) 達到 <strong>57.7%</strong> 的準確率，展現穩定的預測能力。</p>
+                            </div>
+
+                            <div class="analysis-section">
+                                <h4>🎯 關鍵指標解讀</h4>
+                                <ul class="analysis-list">
+                                    <li><strong>精確率 69.6%</strong>：預測為上漲時，約 7 成確實上漲</li>
+                                    <li><strong>召回率 51.6%</strong>：實際上漲中，成功辨識約 5 成</li>
+                                    <li><strong>ROC 曲線</strong>：高於隨機分類器基線，顯示模型具初步辨識能力</li>
+                                </ul>
+                            </div>
+
+                            <div class="analysis-section">
+                                <h4>💡 實務應用建議</h4>
+                                <p>模型可作為<strong>輔助判斷工具</strong>，建議結合其他技術指標與市場資訊，形成完整的投資決策流程。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- 讓數據點亮投資決策 卡片 -->
+        <section class="investment-section">
+            <article class="investment-card">
+                <h2>🟩 讓數據點亮投資決策</h2>
+                <p class="summary">透過機器學習模型分析歷史股價，於上漲機率高的時段產生買進訊號，協助使用者以量化方式掌握市場節奏。</p>
+
+                <ul class="investment-points">
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">以 <strong>QQQ ETF 週線資料</strong> 為基礎進行預測</div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">模型在高上漲機率時觸發 <strong>買進訊號燈</strong></div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">圖表同時顯示 <strong>實際股價與預測趨勢線</strong></div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">呈現機器學習模型於投資判斷中的 <strong>應用價值</strong></div>
+                    </li>
+                    <li>
+                        <span class="point-bullet" aria-hidden="true"></span>
+                        <div class="point-desc">提供可直覺理解的 <strong>視覺化交易參考介面</strong></div>
+                    </li>
+                </ul>
+
+                <!-- 股價預測圖表 -->
+                <div class="chart-container">
+                    <h3>QQQ ETF 實際股價 vs 模型預測</h3>
+
+                    <!-- 閾值控制滑桿 -->
+                    <div class="threshold-control">
+                        <label for="thresholdSlider">買進訊號閾值: <span id="thresholdValue">0.5</span></label>
+                        <input type="range" id="thresholdSlider" min="0.4" max="0.8" step="0.1" value="0.5">
+                        <div class="threshold-marks">
+                            <span>0.4</span>
+                            <span>0.5</span>
+                            <span>0.6</span>
+                            <span>0.7</span>
+                            <span>0.8</span>
+                        </div>
+                    </div>
+
+                    <canvas id="priceChart"></canvas>
+
+                    <!-- R-squared 數值顯示 -->
+                    <div class="r-squared-text">
+                        R<sup>2</sup> (預測下一週價格 vs 實際下一週價格) = 0.7526
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2025 臺北市職能發展學院. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDetails(button) {
+            const detailsContent = button.nextElementSibling;
+            if (detailsContent.style.display === 'none') {
+                detailsContent.style.display = 'block';
+                button.textContent = '收起詳細資訊 ▲';
+            } else {
+                detailsContent.style.display = 'none';
+                button.textContent = '詳細資訊 ▼';
+            }
+        }
+
+        function toggleResult() {
+            const resultDisplay = document.getElementById('resultDisplay');
+            const button = event.target;
+            if (resultDisplay.style.display === 'none') {
+                resultDisplay.style.display = 'block';
+                button.textContent = '收起測試結果 ▲';
+            } else {
+                resultDisplay.style.display = 'none';
+                button.textContent = '查看測試結果';
+            }
+        }
+
+        function toggleTable() {
+            const dataTable = document.getElementById('dataTable');
+            const button = event.target;
+            if (dataTable.style.display === 'none') {
+                dataTable.style.display = 'block';
+                button.textContent = '收起詳細數據 ▲';
+            } else {
+                dataTable.style.display = 'none';
+                button.textContent = '顯示詳細數據 ▼';
+            }
+        }
+
+        // 建立準確率趨勢圖表
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('accuracyChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2021-2022', '2022-2023', '2023-2024', '2024-2025'],
+                    datasets: [
+                        {
+                            label: '準確率',
+                            data: [55.80, 57.70, 55.80, 57.70],
+                            borderColor: '#0B346E',
+                            backgroundColor: 'rgba(11, 52, 110, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: '平衡準確率',
+                            data: [57.60, 58.90, 57.00, 59.10],
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 13 },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 50,
+                            max: 65,
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '準確率 (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '測試期間'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 建立 ROC 曲線圖表
+            const rocCtx = document.getElementById('rocChart').getContext('2d');
+
+            // ROC 曲線數據
+            const fpr = [0, 0, 0, 0.14285714285714285, 0.14285714285714285, 0.19047619047619047, 0.19047619047619047, 0.42857142857142855, 0.42857142857142855, 0.47619047619047616, 0.47619047619047616, 0.5238095238095238, 0.5238095238095238, 0.6666666666666666, 0.6666666666666666, 0.7142857142857143, 0.7142857142857143, 0.9047619047619048, 0.9047619047619048, 0.9523809523809523, 0.9523809523809523, 1];
+            const tpr = [0, 0.032258065, 0.2903225806451613, 0.2903225806451613, 0.3548387096774194, 0.3548387096774194, 0.3870967741935484, 0.3870967741935484, 0.41935483870967744, 0.41935483870967744, 0.45161290322580644, 0.45161290322580644, 0.4838709677419355, 0.4838709677419355, 0.5483870967741935, 0.5483870967741935, 0.8387096774193549, 0.8387096774193549, 0.9032258064516129, 0.9032258064516129, 1, 1];
+
+            // 計算 AUC (使用梯形法則近似)
+            let auc = 0;
+            for (let i = 1; i < fpr.length; i++) {
+                auc += (fpr[i] - fpr[i - 1]) * (tpr[i] + tpr[i - 1]) / 2;
+            }
+
+            // 生成對角線數據 (隨機分類器基線)
+            const diagonalData = [
+                { x: 0, y: 0 },
+                { x: 1, y: 1 }
+            ];
+
+            // 將 FPR 和 TPR 轉換為坐標點
+            const rocData = fpr.map((x, i) => ({ x: x, y: tpr[i] }));
+
+            const rocChart = new Chart(rocCtx, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            label: 'ROC 曲線 (AUC = ' + auc.toFixed(3) + ')',
+                            data: rocData,
+                            borderColor: '#FF8C00',
+                            backgroundColor: 'rgba(255, 140, 0, 0.15)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#FF8C00',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
+                        },
+                        {
+                            label: '隨機分類器 (AUC = 0.5)',
+                            data: diagonalData,
+                            borderColor: '#0B346E',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12 },
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    if (context.datasetIndex === 0) {
+                                        return [
+                                            'FPR: ' + context.parsed.x.toFixed(3),
+                                            'TPR: ' + context.parsed.y.toFixed(3)
+                                        ];
+                                    }
+                                    return context.dataset.label;
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '接收者操作特徵曲線',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            color: '#0B346E',
+                            padding: {
+                                top: 5,
+                                bottom: 15
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            min: 0,
+                            max: 1,
+                            title: {
+                                display: true,
+                                text: 'False Positive Rate (偽陽性率)',
+                                font: {
+                                    size: 13,
+                                    weight: 'bold'
+                                },
+                                color: '#0B346E'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toFixed(1);
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            min: 0,
+                            max: 1,
+                            title: {
+                                display: true,
+                                text: 'True Positive Rate (真陽性率/召回率)',
+                                font: {
+                                    size: 13,
+                                    weight: 'bold'
+                                },
+                                color: '#0B346E'
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return value.toFixed(1);
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 閾值對應的買進訊號日期
+            const signalDates = {
+                0.4: ['24/10/2024', '07/11/2024', '14/11/2024', '21/11/2024', '28/11/2024', '12/12/2024', '19/12/2024', '26/12/2024', '20/02/2025', '06/03/2025', '13/03/2025', '20/03/2025', '27/03/2025', '03/04/2025', '10/04/2025', '17/04/2025', '24/04/2025', '01/05/2025', '08/05/2025', '22/05/2025', '29/05/2025', '12/06/2025', '19/06/2025', '07/08/2025', '21/08/2025', '04/09/2025'],
+                0.5: ['24/10/2024', '07/11/2024', '14/11/2024', '21/11/2024', '28/11/2024', '12/12/2024', '19/12/2024', '26/12/2024', '20/02/2025', '06/03/2025', '13/03/2025', '20/03/2025', '27/03/2025', '03/04/2025', '10/04/2025', '17/04/2025', '24/04/2025', '01/05/2025', '22/05/2025', '29/05/2025', '12/06/2025', '19/06/2025', '04/09/2025'],
+                0.6: ['24/10/2024', '14/11/2024', '21/11/2024', '12/12/2024', '19/12/2024', '20/02/2025', '06/03/2025', '13/03/2025', '20/03/2025', '27/03/2025', '03/04/2025', '10/04/2025', '17/04/2025', '24/04/2025', '01/05/2025', '12/06/2025'],
+                0.7: ['14/11/2024', '12/12/2024', '19/12/2024', '20/02/2025', '06/03/2025', '13/03/2025', '20/03/2025', '27/03/2025', '03/04/2025', '10/04/2025', '17/04/2025', '01/05/2025'],
+                0.8: ['12/12/2024', '20/02/2025', '06/03/2025', '13/03/2025', '03/04/2025', '10/04/2025', '17/04/2025']
+            };
+
+            // 建立股價預測圖表
+            const priceCtx = document.getElementById('priceChart').getContext('2d');
+
+            const allDates = ['17/10/2024', '24/10/2024', '31/10/2024', '07/11/2024', '14/11/2024', '21/11/2024', '28/11/2024', '05/12/2024', '12/12/2024', '19/12/2024', '26/12/2024', '02/01/2025', '09/01/2025', '16/01/2025', '23/01/2025', '30/01/2025', '06/02/2025', '13/02/2025', '20/02/2025', '27/02/2025', '06/03/2025', '13/03/2025', '20/03/2025', '27/03/2025', '03/04/2025', '10/04/2025', '17/04/2025', '24/04/2025', '01/05/2025', '08/05/2025', '15/05/2025', '22/05/2025', '29/05/2025', '05/06/2025', '12/06/2025', '19/06/2025', '26/06/2025', '03/07/2025', '10/07/2025', '17/07/2025', '24/07/2025', '31/07/2025', '07/08/2025', '14/08/2025', '21/08/2025', '28/08/2025', '04/09/2025', '11/09/2025', '18/09/2025', '25/09/2025', '02/10/2025'];
+
+            const actualPrices = [485.74, 493.72, 502.87, 509.5, 500.47, 502.59, 520.45, 527.08, 513.7, 527.12, 509.31, 513.33, 514.76, 529.51, 518.87, 524.87, 526.31, 537.49, 512.62, 500.12, 475.12, 479.08, 482.56, 475.07, 464.94, 443.17, 453.52, 474.39, 482.2, 517.5, 511.87, 517.73, 527.57, 531.2, 527.78, 539.93, 550.16, 555.61, 556.64, 563.16, 567.36, 566.66, 579.67, 565.24, 572.83, 569.41, 580.03, 589.32, 595.41, 603.25, 611.44];
+
+            const predPrices = [482.43, 476.56, 499.00, 500.52, 510.81, 507.12, 507.89, 522.62, 519.54, 523.91, 535.08, 511.67, 507.27, 505.56, 524.55, 510.63, 515.74, 517.54, 531.38, 524.85, 497.48, 486.29, 489.21, 488.85, 481.38, 474.32, 451.04, 462.70, 478.01, 488.08, 516.26, 506.57, 518.90, 529.67, 525.70, 533.23, 543.29, 540.03, 549.23, 548.76, 559.80, 557.78, 556.42, 580.10, 554.82, 573.41, 559.37, 581.42, 578.30, 584.00, 592.75];
+
+            // 生成買進訊號數據
+            function getSignalData(threshold) {
+                const signals = signalDates[threshold] || [];
+                return allDates.map((date, index) => {
+                    return signals.includes(date) ? actualPrices[index] : null;
+                });
+            }
+
+            const priceChart = new Chart(priceCtx, {
+                type: 'line',
+                data: {
+                    labels: allDates,
+                    datasets: [
+                        {
+                            label: 'QQQ 實際股價',
+                            data: actualPrices,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 3,
+                            pointHoverRadius: 5,
+                            order: 2
+                        },
+                        {
+                            label: '模型預測股價',
+                            data: predPrices,
+                            borderColor: '#FF6B6B',
+                            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.3,
+                            fill: false,
+                            pointRadius: 3,
+                            pointHoverRadius: 5,
+                            order: 1
+                        },
+                        {
+                            label: '買進訊號',
+                            data: getSignalData(0.5),
+                            borderColor: '#4CAF50',
+                            backgroundColor: '#4CAF50',
+                            pointStyle: 'triangle',
+                            rotation: 0,
+                            pointRadius: 12,
+                            pointHoverRadius: 15,
+                            pointBorderWidth: 2,
+                            pointBorderColor: '#2E7D32',
+                            showLine: false,
+                            order: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2.5,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 13 },
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toFixed(2);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + value;
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '股價 (USD)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '日期'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: 15
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 閾值滑桿事件監聽
+            const thresholdSlider = document.getElementById('thresholdSlider');
+            const thresholdValue = document.getElementById('thresholdValue');
+
+            thresholdSlider.addEventListener('input', function () {
+                const threshold = parseFloat(this.value);
+                thresholdValue.textContent = threshold.toFixed(1);
+
+                // 更新圖表的買進訊號數據
+                priceChart.data.datasets[2].data = getSignalData(threshold);
+                priceChart.update();
+            });
+
+            // 窗口調整大小時更新所有圖表
+            let resizeTimeout;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function () {
+                    if (rocChart) rocChart.resize();
+                    if (priceChart) priceChart.resize();
+                }, 100);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

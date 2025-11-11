@@ -1,0 +1,184 @@
+body {
+    /* **【修改點一】** 設置基礎字體大小，整個頁面的基礎字體都將基於此 */
+    font-size: 16px;
+    /* 基礎字體大小，您可以調整為 18px 或 14px */
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f9;
+    padding: 20px;
+}
+
+/* 儀表板標題 */
+.dashboard-header h1 {
+    /* **【新增/修改點】** 讓標題更大一點 */
+    font-size: 4.2em;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 【新增點二】導航欄樣式 (模擬圖片中的深藍色背景) */
+.navbar {
+    background-color: #1a3c6f;
+    /* 深藍色背景 */
+    display: flex;
+    /* 讓按鈕水平排列 */
+    justify-content: flex-end;
+    /* 按鈕靠右對齊 */
+    padding: 10px 20px;
+    /* 內邊距 */
+    margin-bottom: 20px;
+    /* 與下方內容保持距離 */
+    border-radius: 4px;
+    /* 圓角 */
+}
+
+.nav-item {
+    color: white;
+    /* 連結文字顏色 */
+    text-decoration: none;
+    /* 移除下劃線 */
+    padding: 8px 15px;
+    /* 按鈕大小 */
+    margin-left: 10px;
+    /* 按鈕間距 */
+    font-size: 1.1em;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+/* 活躍/選中狀態的按鈕 (模擬圖片中的淺色底色) */
+.nav-item.active {
+    background-color: #3c82f6;
+    /* 淺藍色背景 */
+    font-weight: bold;
+}
+
+.nav-item:hover {
+    background-color: #3c82f6;
+}
+
+/* ------------------------------------- */
+
+
+.stock-overview {
+    background-color: #5a72f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgb(247, 245, 245);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.price-box {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* ... (其餘 style.css 內容保持不變) ... */
+/* 當前價格 (最大的數字) */
+.large-text {
+    /* **【修改點二】** 調整當前股價的數字大小，我將它加大到 4em */
+    font-size: 4em;
+    font-weight: bold;
+    color: white;
+    /* 確保價格數字是白色，便於在藍色背景上閱讀 */
+}
+
+/* 價格標籤 (當前價格:) */
+.stock-label {
+    /* **【新增/修改點】** 價格標籤的字體大小 */
+    font-size: 1em;
+    display: block;
+    color: #e0e0e0;
+    /* 淺灰色 */
+}
+
+
+/* 漲跌幅百分比和金額 */
+.change-pct,
+.change-amt {
+    /* **【新增/修改點】** 漲跌幅的字體大小 */
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+/* 漲跌幅顏色邏輯 (無需修改大小，保留原樣) */
+.change-pct.up {
+    color: #00b894;
+}
+
+.change-pct.down {
+    color: #d63031;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+/* 統計項目標籤 (開盤價:、最高價: 等) */
+.stat-label {
+    /* **【修改點三】** 調整統計數據的小標籤文字大小 */
+    display: block;
+    font-size: 0.9em;
+    color: #cfd8dc;
+    /* 淺色 */
+}
+
+/* 統計項目的實際數值 (id="open-price" 等) */
+.stat-item span:not(.stat-label) {
+    /* **【新增/修改點】** 統計數據的實際數值大小 */
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    margin-top: 5px;
+}
+
+/* 圖表容器的標題 */
+.chart-container h2 {
+    /* **【新增/修改點】** K 線圖標題大小 */
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.chart-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* 確保 ECharts 容器有固定高度 */
+#price-chart,
+#model-chart {
+    height: 400px;
+    /* 您可能需要根據實際情況調整高度 */
+    width: 100%;
+}
+
+/* Footer */
+.site-footer {
+    /* 左到右漸層背景，與卡片的灰色明顯區分 */
+    background: linear-gradient(90deg, #0B346E 0%, #667eea 100%);
+    padding: 18px 0;
+    margin-top: 24px;
+}
+
+.site-footer .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 16px;
+    text-align: center;
+    color: #ffffff;
+    /* 與深色漸層形成高對比，便於閱讀 */
+    font-size: 0.95rem;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QQQ 股價儀表板</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="dashboard-header">
+        <h1>🚀 QQQ (Invesco QQQ Trust) 即時儀表板</h1>
+    </header>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-item active">首頁</a>
+        <a href="./Engineering/Engineering.html" class="nav-item">特徵工程</a>
+        <a href="./Analysis/Analysis.html" class="nav-item">資料分析</a>
+    </nav>
+
+    <div class="stock-overview">
+        <div class="price-box">
+            <span class="stock-label">當前價格:</span>
+            <span id="current-price" class="large-text"></span> USD
+        </div>
+        <div class="change-box">
+            <span id="price-change-pct" class=""></span>
+            <span id="price-change-amt" class=""></span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class=""></span>
+                <span id=""></span>
+            </div>
+            <div class="stat-item">
+                <span class=""></span>
+                <span id=""></span>
+            </div>
+            <div class="stat-item">
+                <span class=""></span>
+                <span id=""></span>
+            </div>
+            <div class="stat-item">
+                <span class=""></span>
+                <span id=""></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <h2>🗓️ QQQ 歷史股價 K 線圖</h2>
+        <div id="price-chart" style="width: 100%; height: 400px;"></div>
+
+        <h2>🤖 模型圖形 / 技術指標 </h2>
+        <div id="model-chart" style="width: 100%; height: 200px;"></div>
+    </div>
+    <!-- 頁尾 -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>© 2025 職能發展學院. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="my.js"></script>
+</body>
+
+</html>
