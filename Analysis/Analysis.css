@@ -458,19 +458,10 @@
     line-height: 1.4;
 }
 
-/* 混淆矩陣與指標包裝容器 */
+/* 混淆矩陣與指標包裝容器 - 上2下1佈局 */
 .matrix-metrics-wrapper {
-    display: flex;
-    gap: 2%;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-/* 2x2 網格佈局 */
-.matrix-metrics-wrapper.grid-2x2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
     gap: 1.5rem;
     margin-top: 2rem;
 }
@@ -481,13 +472,6 @@
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex: 1;
-    min-width: 48%;
-}
-
-.grid-2x2 .confusion-matrix-container {
-    grid-column: 1;
-    grid-row: 1;
 }
 
 .confusion-matrix-container h3 {
@@ -678,38 +662,9 @@
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex: 1;
-    min-width: 48%;
-}
-
-.grid-2x2 .metrics-container {
-    grid-column: 2;
-    grid-row: 1;
 }
 
 .metrics-container h3 {
-    margin: 0 0 1.5rem 0;
-    color: #0B346E;
-    font-size: 1.1rem;
-    text-align: center;
-}
-
-/* ROC 容器 */
-.roc-container {
-    padding: 1.5rem;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex: 1;
-    min-width: 48%;
-}
-
-.grid-2x2 .roc-container {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.roc-container h3 {
     margin: 0 0 1.5rem 0;
     color: #0B346E;
     font-size: 1.1rem;
@@ -722,13 +677,8 @@
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex: 1;
-    min-width: 48%;
-}
-
-.grid-2x2 .analysis-container {
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 1 / -1;
+    /* 佔據整行 */
 }
 
 .analysis-container h3 {
@@ -753,18 +703,6 @@
     color: #0B346E;
     font-size: 1.1rem;
     text-align: center;
-}
-
-.roc-chart-wrapper {
-    padding: 1rem;
-    background: #ffffff;
-    border-radius: 6px;
-    height: 400px;
-    position: relative;
-}
-
-.roc-chart-wrapper canvas {
-    max-height: 100%;
 }
 
 /* 結果分析內容樣式 */
@@ -1027,43 +965,12 @@
 /* 手機尺寸 (768px 以下) */
 @media (max-width: 768px) {
     .matrix-metrics-wrapper {
-        flex-direction: column;
-    }
-
-    .matrix-metrics-wrapper.grid-2x2 {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
-    }
-
-    .grid-2x2 .confusion-matrix-container,
-    .grid-2x2 .metrics-container,
-    .grid-2x2 .roc-container,
-    .grid-2x2 .analysis-container {
-        grid-column: 1;
-    }
-
-    .grid-2x2 .confusion-matrix-container {
-        grid-row: 1;
-    }
-
-    .grid-2x2 .metrics-container {
-        grid-row: 2;
-    }
-
-    .grid-2x2 .roc-container {
-        grid-row: 3;
-    }
-
-    .grid-2x2 .analysis-container {
-        grid-row: 4;
     }
 
     .confusion-matrix-container,
     .metrics-container,
-    .roc-container,
-    .analysis-container,
-    .additional-container {
-        min-width: 100%;
+    .analysis-container {
         margin-bottom: 1.5rem;
     }
 
@@ -1078,10 +985,6 @@
 
     .matrix-legend {
         grid-template-columns: 1fr;
-    }
-
-    .roc-chart-wrapper {
-        height: 350px;
     }
 }
 
@@ -1099,6 +1002,240 @@
     margin: 0 0 1rem 0;
     color: #0B346E;
     font-size: 1.1rem;
+}
+
+/* 歷年測試結果 - 左右兩欄佈局 */
+.chart-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.chart-section h3 {
+    margin: 0 0 1.5rem 0;
+    color: #0B346E;
+    font-size: 1.1rem;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1rem;
+    align-items: start;
+    overflow: hidden;
+}
+
+.chart-left {
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.chart-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow: hidden;
+}
+
+/* 控制面板包裝容器 */
+.control-panel-wrapper {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+/* 當前選擇包裝容器 */
+.current-selection-wrapper {
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.panel-title {
+    margin: 0 0 1rem 0;
+    color: #0B346E;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* 控制面板 */
+.control-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 按鈕網格 */
+.button-grid {
+    position: relative;
+    padding-top: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.grid-main {
+    position: relative;
+    display: inline-block;
+}
+
+/* 軸標籤 */
+.grid-label-y {
+    position: absolute;
+    left: -35px;
+    top: calc(50% + 0.75rem);
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap;
+}
+
+.grid-label-x {
+    position: absolute;
+    top: -1.6rem;
+    left: 58%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.axis-title {
+    font-size: 13px;
+    color: #0B346E;
+    font-weight: 600;
+}
+
+/* 網格標題列 */
+.grid-header {
+    display: grid;
+    grid-template-columns: 30px repeat(5, 48px);
+    gap: 6px;
+    margin-bottom: 6px;
+    padding-left: 0;
+    justify-content: start;
+}
+
+.header-spacer {
+    width: 30px;
+}
+
+.header-item {
+    text-align: center;
+    font-size: 12px;
+    color: #0B346E;
+    font-weight: 600;
+    padding: 2px;
+    width: 48px;
+}
+
+/* 網格主體 */
+.grid-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.grid-row {
+    display: grid;
+    grid-template-columns: 30px repeat(5, 48px);
+    gap: 6px;
+    align-items: center;
+    justify-content: start;
+}
+
+.row-label {
+    width: 30px;
+    text-align: center;
+    font-size: 12px;
+    color: #0B346E;
+    font-weight: 600;
+}
+
+/* 網格按鈕 */
+.grid-btn {
+    aspect-ratio: 1;
+    border: 2px solid #dee2e6;
+    background: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #6c757d;
+    transition: all 0.2s ease;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    max-width: 48px;
+    max-height: 48px;
+    width: 100%;
+    height: auto;
+}
+
+.grid-btn:hover {
+    border-color: #0B346E;
+    border-width: 3px;
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(11, 52, 110, 0.3);
+}
+
+.grid-btn.active {
+    border-color: #0B346E;
+    border-width: 4px;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(11, 52, 110, 0.5);
+}
+
+/* 色階軸 */
+.color-scale {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: -0.3rem;
+}
+
+.scale-bar {
+    width: 30px;
+    height: 330px;
+    background: linear-gradient(to top, #4FC3F7 0%, #FF7043 100%);
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.scale-label-top,
+.scale-label-bottom {
+    font-size: 11px;
+    color: #0B346E;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* 當前選擇顯示 */
+.current-selection {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.current-selection p {
+    margin: 0;
+    font-size: 14px;
+    color: #495057;
+    line-height: 1.6;
+}
+
+.current-selection strong {
+    color: #0B346E;
+    font-weight: 600;
 }
 
 /* R-squared 數值文字 */
@@ -1241,6 +1378,143 @@
 @media (max-width: 768px) {
     .chart-container {
         padding: 1rem;
+        overflow-x: hidden;
+    }
+
+    .chart-section {
+        padding: 1rem;
+        overflow-x: hidden;
+    }
+
+    .chart-section h3 {
+        font-size: 1.2rem;
+    }
+
+    .chart-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        overflow-x: hidden;
+    }
+
+    .chart-left {
+        padding: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .chart-right {
+        min-height: auto;
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .control-panel-wrapper {
+        padding: 0.75rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+
+    .panel-title {
+        font-size: 14px;
+        margin-bottom: 0.75rem;
+    }
+
+    .button-grid {
+        padding-top: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .grid-main {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .grid-label-y {
+        font-size: 11px;
+        left: -25px;
+    }
+
+    .grid-label-x {
+        font-size: 11px;
+        top: -1.2rem;
+    }
+
+    .axis-title {
+        font-size: 11px;
+    }
+
+    .grid-header,
+    .grid-row {
+        grid-template-columns: 25px repeat(5, 40px);
+        gap: 4px;
+        min-width: fit-content;
+    }
+
+    .header-spacer,
+    .row-label {
+        width: 25px;
+        font-size: 10px;
+    }
+
+    .header-item {
+        font-size: 10px;
+        padding: 2px;
+        width: 40px;
+    }
+
+    .grid-btn {
+        max-width: 40px;
+        max-height: 40px;
+        border-width: 2px;
+    }
+
+    .grid-btn:hover {
+        border-width: 2px;
+        transform: scale(1.03);
+    }
+
+    .grid-btn.active {
+        border-width: 3px;
+        transform: scale(1.02);
+    }
+
+    .color-scale {
+        margin-top: 0;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .scale-bar {
+        width: 200px;
+        height: 20px;
+        background: linear-gradient(to right, #4FC3F7 0%, #FF7043 100%);
+    }
+
+    .scale-label-top,
+    .scale-label-bottom {
+        font-size: 10px;
+    }
+
+    .current-selection-wrapper {
+        padding: 0.75rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .current-selection p {
+        font-size: 13px;
+        word-wrap: break-word;
     }
 
     .result-table {

@@ -19,7 +19,7 @@
 
     <nav class="navbar">
         <a href="../index.html" class="nav-item">首頁</a>
-        <a href="../Engineering/Engineering.html" class="nav-item">特徵工程</a>
+        <a href="#" class="nav-item">分頁二</a>
         <a href="Analysis.html" class="nav-item active">資料分析</a>
     </nav>
 
@@ -173,10 +173,128 @@
                     </li>
                 </ul>
 
-                <!-- 測試結果視覺化 -->
-                <div class="chart-container">
+                <!-- 測試結果視覺化 - 左右兩欄佈局 -->
+                <div class="chart-section">
                     <h3>歷年測試結果</h3>
-                    <canvas id="accuracyChart"></canvas>
+                    <div class="chart-row">
+                        <!-- 左邊：線條圖 -->
+                        <div class="chart-left">
+                            <canvas id="accuracyChart"></canvas>
+                        </div>
+
+                        <!-- 右邊：垂直排列的兩個獨立區塊 -->
+                        <div class="chart-right">
+                            <!-- 操作面板區塊 -->
+                            <div class="control-panel-wrapper">
+                                <h4 class="panel-title">模型超參數操控面板</h4>
+                                <div class="control-panel">
+                                    <!-- 按鈕網格 -->
+                                    <div class="button-grid">
+                                        <!-- 網格主要內容 -->
+                                        <div class="grid-main">
+                                            <!-- 垂直軸標籤（最大深度） -->
+                                            <div class="grid-label-y">
+                                                <span class="axis-title">最大深度</span>
+                                            </div>
+
+                                            <!-- 水平軸標籤（決策樹個數） -->
+                                            <div class="grid-label-x">
+                                                <span class="axis-title">決策樹個數</span>
+                                            </div>
+
+                                            <!-- 水平軸數值 -->
+                                            <div class="grid-header">
+                                                <div class="header-spacer"></div>
+                                                <div class="header-item">100</div>
+                                                <div class="header-item">200</div>
+                                                <div class="header-item">300</div>
+                                                <div class="header-item">400</div>
+                                                <div class="header-item">500</div>
+                                            </div>
+
+                                            <!-- 按鈕網格主體 -->
+                                            <div class="grid-body">
+                                                <!-- 深度 = 1 -->
+                                                <div class="grid-row">
+                                                    <div class="row-label">1</div>
+                                                    <button class="grid-btn" data-trees="100" data-depth="1"></button>
+                                                    <button class="grid-btn" data-trees="200" data-depth="1"></button>
+                                                    <button class="grid-btn" data-trees="300" data-depth="1"></button>
+                                                    <button class="grid-btn" data-trees="400" data-depth="1"></button>
+                                                    <button class="grid-btn" data-trees="500" data-depth="1"></button>
+                                                </div>
+
+                                                <!-- 深度 = 2 -->
+                                                <div class="grid-row">
+                                                    <div class="row-label">2</div>
+                                                    <button class="grid-btn" data-trees="100" data-depth="2"></button>
+                                                    <button class="grid-btn" data-trees="200" data-depth="2"></button>
+                                                    <button class="grid-btn" data-trees="300" data-depth="2"></button>
+                                                    <button class="grid-btn" data-trees="400" data-depth="2"></button>
+                                                    <button class="grid-btn" data-trees="500" data-depth="2"></button>
+                                                </div>
+
+                                                <!-- 深度 = 3 -->
+                                                <div class="grid-row">
+                                                    <div class="row-label">3</div>
+                                                    <button class="grid-btn" data-trees="100" data-depth="3"></button>
+                                                    <button class="grid-btn" data-trees="200" data-depth="3"></button>
+                                                    <button class="grid-btn" data-trees="300" data-depth="3"></button>
+                                                    <button class="grid-btn active" data-trees="400"
+                                                        data-depth="3"></button>
+                                                    <button class="grid-btn" data-trees="500" data-depth="3"></button>
+                                                </div>
+
+                                                <!-- 深度 = 4 -->
+                                                <div class="grid-row">
+                                                    <div class="row-label">4</div>
+                                                    <button class="grid-btn" data-trees="100" data-depth="4"></button>
+                                                    <button class="grid-btn" data-trees="200" data-depth="4"></button>
+                                                    <button class="grid-btn" data-trees="300" data-depth="4"></button>
+                                                    <button class="grid-btn" data-trees="400" data-depth="4"></button>
+                                                    <button class="grid-btn" data-trees="500" data-depth="4"></button>
+                                                </div>
+
+                                                <!-- 深度 = 5 -->
+                                                <div class="grid-row">
+                                                    <div class="row-label">5</div>
+                                                    <button class="grid-btn" data-trees="100" data-depth="5"></button>
+                                                    <button class="grid-btn" data-trees="200" data-depth="5"></button>
+                                                    <button class="grid-btn" data-trees="300" data-depth="5"></button>
+                                                    <button class="grid-btn" data-trees="400" data-depth="5"></button>
+                                                    <button class="grid-btn" data-trees="500" data-depth="5"></button>
+                                                </div>
+
+                                                <!-- 深度 = 6 -->
+                                                <div class="grid-row">
+                                                    <div class="row-label">6</div>
+                                                    <button class="grid-btn" data-trees="100" data-depth="6"></button>
+                                                    <button class="grid-btn" data-trees="200" data-depth="6"></button>
+                                                    <button class="grid-btn" data-trees="300" data-depth="6"></button>
+                                                    <button class="grid-btn" data-trees="400" data-depth="6"></button>
+                                                    <button class="grid-btn" data-trees="500" data-depth="6"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 色階軸 -->
+                                        <div class="color-scale">
+                                            <div class="scale-label-top">過擬合</div>
+                                            <div class="scale-bar"></div>
+                                            <div class="scale-label-bottom">欠擬合</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 當前選擇區塊（獨立背景） -->
+                            <div class="current-selection-wrapper">
+                                <div class="current-selection">
+                                    <p>當前選擇：<strong id="selectedParams">決策樹 400 棵，最大深度 3 層</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 資料表格 -->
@@ -251,14 +369,10 @@
                         <span class="point-bullet" aria-hidden="true"></span>
                         <div class="point-desc"><strong>混淆矩陣</strong>：可視化各類別的預測結果</div>
                     </li>
-                    <li>
-                        <span class="point-bullet" aria-hidden="true"></span>
-                        <div class="point-desc"><strong>ROC/AUC 曲線</strong>：以閾值無關方式衡量整體辨識力</div>
-                    </li>
                 </ul>
 
-                <!-- 混淆矩陣與指標區塊 - 2x2 網格佈局 -->
-                <div class="matrix-metrics-wrapper grid-2x2">
+                <!-- 混淆矩陣與指標區塊 - 上2下1佈局 -->
+                <div class="matrix-metrics-wrapper">
                     <!-- 左上：混淆矩陣視覺化 -->
                     <div class="confusion-matrix-container">
                         <h3>混淆矩陣 (Confusion Matrix)</h3>
@@ -372,15 +486,7 @@
                         </div>
                     </div>
 
-                    <!-- 左下：ROC/AUC 曲線 -->
-                    <div class="roc-container">
-                        <h3>ROC/AUC 曲線</h3>
-                        <div class="roc-chart-wrapper">
-                            <canvas id="rocChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- 右下：結果分析 -->
+                    <!-- 下方：結果分析 -->
                     <div class="analysis-container">
                         <h3>結果分析</h3>
                         <div class="analysis-content">
@@ -394,7 +500,6 @@
                                 <ul class="analysis-list">
                                     <li><strong>精確率 69.6%</strong>：預測為上漲時，約 7 成確實上漲</li>
                                     <li><strong>召回率 51.6%</strong>：實際上漲中，成功辨識約 5 成</li>
-                                    <li><strong>ROC 曲線</strong>：高於隨機分類器基線，顯示模型具初步辨識能力</li>
                                 </ul>
                             </div>
 
@@ -512,7 +617,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const ctx = document.getElementById('accuracyChart').getContext('2d');
 
-            new Chart(ctx, {
+            const accuracyChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ['2021-2022', '2022-2023', '2023-2024', '2024-2025'],
@@ -536,13 +641,24 @@
                             fill: true,
                             pointRadius: 5,
                             pointHoverRadius: 7
+                        },
+                        {
+                            label: '50%基準線',
+                            data: [50, 50, 50, 50],
+                            borderColor: '#FF0000',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            tension: 0
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    aspectRatio: 2,
+                    aspectRatio: window.innerWidth > 768 ? 2 : 1.5,
                     plugins: {
                         legend: {
                             display: true,
@@ -563,9 +679,10 @@
                     scales: {
                         y: {
                             beginAtZero: false,
-                            min: 50,
+                            min: 40,
                             max: 65,
                             ticks: {
+                                stepSize: 5,
                                 callback: function (value) {
                                     return value + '%';
                                 }
@@ -585,145 +702,126 @@
                 }
             });
 
-            // 建立 ROC 曲線圖表
-            const rocCtx = document.getElementById('rocChart').getContext('2d');
+            // 超參數對應的模型數據
+            const modelData = {
+                "100": {
+                    "1": { accuracy: [51.9, 61.5, 53.8, 51.9], balanced: [54.2, 61.5, 55.6, 50.5] },
+                    "2": { accuracy: [53.8, 55.8, 50.0, 53.8], balanced: [56.4, 56.7, 51.7, 56.7] },
+                    "3": { accuracy: [55.8, 53.8, 55.8, 57.7], balanced: [58.1, 53.7, 57.1, 60.7] },
+                    "4": { accuracy: [55.8, 53.8, 51.9, 50.0], balanced: [58.5, 55.0, 53.4, 51.2] },
+                    "5": { accuracy: [55.8, 51.9, 59.6, 48.1], balanced: [58.5, 53.3, 60.8, 49.5] },
+                    "6": { accuracy: [53.8, 53.8, 55.8, 46.2], balanced: [56.4, 54.6, 56.8, 47.2] }
+                },
+                "200": {
+                    "1": { accuracy: [51.9, 59.6, 51.9, 51.9], balanced: [52.8, 59.7, 53.7, 51.2] },
+                    "2": { accuracy: [51.9, 59.6, 53.8, 48.1], balanced: [54.2, 61.1, 55.3, 49.5] },
+                    "3": { accuracy: [57.7, 55.8, 51.9, 50.0], balanced: [60.3, 56.7, 53.3, 52.7] },
+                    "4": { accuracy: [51.9, 51.9, 59.6, 51.9], balanced: [54.2, 53.7, 60.7, 54.3] },
+                    "5": { accuracy: [51.9, 55.8, 59.6, 50.0], balanced: [53.7, 57.6, 60.7, 50.4] },
+                    "6": { accuracy: [50.0, 55.8, 59.6, 48.1], balanced: [52.5, 56.7, 60.7, 48.0] }
+                },
+                "300": {
+                    "1": { accuracy: [51.9, 59.6, 51.9, 50.0], balanced: [52.8, 61.5, 53.7, 50.4] },
+                    "2": { accuracy: [50.0, 61.5, 51.9, 50.0], balanced: [52.5, 62.4, 53.3, 52.7] },
+                    "3": { accuracy: [57.7, 55.8, 51.9, 55.8], balanced: [59.8, 57.2, 53.3, 58.3] },
+                    "4": { accuracy: [53.8, 53.8, 59.6, 53.8], balanced: [55.5, 55.5, 60.7, 55.1] },
+                    "5": { accuracy: [48.1, 55.8, 61.5, 50.0], balanced: [49.4, 57.6, 62.5, 50.4] },
+                    "6": { accuracy: [50.0, 55.8, 61.5, 44.2], balanced: [51.6, 57.2, 62.5, 44.0] }
+                },
+                "400": {
+                    "1": { accuracy: [51.9, 57.7, 50.0, 50.0], balanced: [52.8, 59.8, 51.7, 50.4] },
+                    "2": { accuracy: [48.1, 59.6, 51.9, 50.0], balanced: [50.3, 60.2, 53.3, 52.7] },
+                    "3": { accuracy: [55.8, 57.7, 55.8, 57.7], balanced: [57.6, 58.9, 57.0, 59.1] },
+                    "4": { accuracy: [51.9, 53.8, 59.6, 55.8], balanced: [53.3, 55.5, 60.7, 56.8] },
+                    "5": { accuracy: [48.1, 57.7, 61.5, 50.0], balanced: [49.4, 59.4, 62.5, 50.4] },
+                    "6": { accuracy: [50.0, 55.8, 59.6, 44.2], balanced: [51.6, 57.2, 60.5, 44.0] }
+                },
+                "500": {
+                    "1": { accuracy: [50.0, 59.6, 48.1, 51.9], balanced: [50.7, 61.5, 49.9, 52.8] },
+                    "2": { accuracy: [48.1, 59.6, 51.9, 50.0], balanced: [50.3, 60.2, 53.0, 52.7] },
+                    "3": { accuracy: [57.7, 55.8, 55.8, 51.9], balanced: [59.4, 56.7, 57.0, 52.8] },
+                    "4": { accuracy: [48.1, 53.8, 59.6, 50.0], balanced: [49.0, 55.5, 60.7, 51.2] },
+                    "5": { accuracy: [46.2, 59.6, 61.5, 48.1], balanced: [47.7, 61.1, 62.5, 48.0] },
+                    "6": { accuracy: [50.0, 57.7, 61.5, 44.2], balanced: [51.6, 58.9, 62.5, 44.0] }
+                }
+            };
 
-            // ROC 曲線數據
-            const fpr = [0, 0, 0, 0.14285714285714285, 0.14285714285714285, 0.19047619047619047, 0.19047619047619047, 0.42857142857142855, 0.42857142857142855, 0.47619047619047616, 0.47619047619047616, 0.5238095238095238, 0.5238095238095238, 0.6666666666666666, 0.6666666666666666, 0.7142857142857143, 0.7142857142857143, 0.9047619047619048, 0.9047619047619048, 0.9523809523809523, 0.9523809523809523, 1];
-            const tpr = [0, 0.032258065, 0.2903225806451613, 0.2903225806451613, 0.3548387096774194, 0.3548387096774194, 0.3870967741935484, 0.3870967741935484, 0.41935483870967744, 0.41935483870967744, 0.45161290322580644, 0.45161290322580644, 0.4838709677419355, 0.4838709677419355, 0.5483870967741935, 0.5483870967741935, 0.8387096774193549, 0.8387096774193549, 0.9032258064516129, 0.9032258064516129, 1, 1];
+            // 更新圖表數據的函數
+            function updateChartData(trees, depth, chart) {
+                const data = modelData[trees][depth];
 
-            // 計算 AUC (使用梯形法則近似)
-            let auc = 0;
-            for (let i = 1; i < fpr.length; i++) {
-                auc += (fpr[i] - fpr[i - 1]) * (tpr[i] + tpr[i - 1]) / 2;
+                // 更新圖表數據
+                chart.data.datasets[0].data = data.accuracy;
+                chart.data.datasets[1].data = data.balanced;
+
+                // 重新渲染圖表
+                chart.update();
             }
 
-            // 生成對角線數據 (隨機分類器基線)
-            const diagonalData = [
-                { x: 0, y: 0 },
-                { x: 1, y: 1 }
-            ];
+            // 顏色計算函數：從欠擬合(#4FC3F7)到過擬合(#FF7043)
+            function getColorForButton(trees, depth) {
+                // 決策樹數量: 100-500 (0-4索引)
+                const treesIndex = [100, 200, 300, 400, 500].indexOf(parseInt(trees));
+                // 深度: 1-6 (0-5索引)
+                const depthIndex = parseInt(depth) - 1;
 
-            // 將 FPR 和 TPR 轉換為坐標點
-            const rocData = fpr.map((x, i) => ({ x: x, y: tpr[i] }));
+                // 計算複雜度分數 (0到1之間)
+                // 左上角(100,1)=0, 右下角(500,6)=1
+                const complexity = (treesIndex / 4 * 0.5) + (depthIndex / 5 * 0.5);
 
-            const rocChart = new Chart(rocCtx, {
-                type: 'line',
-                data: {
-                    datasets: [
-                        {
-                            label: 'ROC 曲線 (AUC = ' + auc.toFixed(3) + ')',
-                            data: rocData,
-                            borderColor: '#FF8C00',
-                            backgroundColor: 'rgba(255, 140, 0, 0.15)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#FF8C00',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2
-                        },
-                        {
-                            label: '隨機分類器 (AUC = 0.5)',
-                            data: diagonalData,
-                            borderColor: '#0B346E',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            fill: false,
-                            tension: 0,
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'bottom',
-                            labels: {
-                                font: { size: 12 },
-                                padding: 15,
-                                usePointStyle: true
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    if (context.datasetIndex === 0) {
-                                        return [
-                                            'FPR: ' + context.parsed.x.toFixed(3),
-                                            'TPR: ' + context.parsed.y.toFixed(3)
-                                        ];
-                                    }
-                                    return context.dataset.label;
-                                }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: '接收者操作特徵曲線',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            color: '#0B346E',
-                            padding: {
-                                top: 5,
-                                bottom: 15
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            min: 0,
-                            max: 1,
-                            title: {
-                                display: true,
-                                text: 'False Positive Rate (偽陽性率)',
-                                font: {
-                                    size: 13,
-                                    weight: 'bold'
-                                },
-                                color: '#0B346E'
-                            },
-                            ticks: {
-                                callback: function (value) {
-                                    return value.toFixed(1);
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        },
-                        y: {
-                            type: 'linear',
-                            min: 0,
-                            max: 1,
-                            title: {
-                                display: true,
-                                text: 'True Positive Rate (真陽性率/召回率)',
-                                font: {
-                                    size: 13,
-                                    weight: 'bold'
-                                },
-                                color: '#0B346E'
-                            },
-                            ticks: {
-                                callback: function (value) {
-                                    return value.toFixed(1);
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            }
-                        }
-                    }
+                // 欠擬合顏色 (淺藍)
+                const underfit = { r: 79, g: 195, b: 247 };  // #4FC3F7
+                // 過擬合顏色 (橙紅)
+                const overfit = { r: 255, g: 112, b: 67 };   // #FF7043
+
+                // 線性插值
+                const r = Math.round(underfit.r + (overfit.r - underfit.r) * complexity);
+                const g = Math.round(underfit.g + (overfit.g - underfit.g) * complexity);
+                const b = Math.round(underfit.b + (overfit.b - underfit.b) * complexity);
+
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            // 為所有按鈕應用顏色
+            const gridButtons = document.querySelectorAll('.grid-btn');
+            gridButtons.forEach(button => {
+                const trees = button.getAttribute('data-trees');
+                const depth = button.getAttribute('data-depth');
+                const color = getColorForButton(trees, depth);
+                button.style.backgroundColor = color;
+            });
+
+            // 按鈕網格事件監聽器
+            const selectedParamsText = document.getElementById('selectedParams');
+
+            gridButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // 移除所有按鈕的 active 類別
+                    gridButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // 為當前按鈕添加 active 類別
+                    this.classList.add('active');
+
+                    // 獲取選中的參數
+                    const trees = this.getAttribute('data-trees');
+                    const depth = this.getAttribute('data-depth');
+
+                    // 更新顯示文字
+                    selectedParamsText.textContent = `決策樹 ${trees} 棵，最大深度 ${depth} 層`;
+
+                    // 更新圖表數據
+                    updateChartData(trees, depth, accuracyChart);
+
+                    console.log(`選擇：決策樹 ${trees} 棵，最大深度 ${depth} 層`);
+                });
+            });
+
+            // 視窗大小改變時調整圖表比例
+            window.addEventListener('resize', function() {
+                const newAspectRatio = window.innerWidth > 768 ? 2 : 1.5;
+                if (accuracyChart.options.aspectRatio !== newAspectRatio) {
+                    accuracyChart.options.aspectRatio = newAspectRatio;
+                    accuracyChart.resize();
                 }
             });
 
@@ -863,12 +961,11 @@
                 priceChart.update();
             });
 
-            // 窗口調整大小時更新所有圖表
+            // 窗口調整大小時更新圖表
             let resizeTimeout;
             window.addEventListener('resize', function () {
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(function () {
-                    if (rocChart) rocChart.resize();
                     if (priceChart) priceChart.resize();
                 }, 100);
             });
