@@ -3,7 +3,7 @@
 // --- 配置部分 (請務必替換 API Key) ---
 const QQQ_TICKER = 'QQQ';
 // ⚠️ 請替換成您在 Twelve Data 網站上註冊獲取的真實 Key ⚠️
-const API_KEY = '1792a410efed43a7a348c5c4791795eb'; // <--- 請在這裡替換成您自己的 Key！
+const API_KEY = '18ef03e311f344e58c1b1918dbfb5cec'; // <--- 請在這裡替換成您自己的 Key！
 
 const BASE_URL = 'https://api.twelvedata.com';
 
